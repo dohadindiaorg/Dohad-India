@@ -54,7 +54,7 @@ export default function AdminLoginPage() {
         router.push('/admin/dashboard');
         router.refresh();
       } else {
-        const message = data.error || 'Invalid username or password.';
+        const message = data.error || 'Username or password is wrong.';
         setError(message);
         toast.error(message);
       }
