@@ -16,7 +16,7 @@ const hindSiliguri = Hind_Siliguri({
   variable: "--font-hind-siliguri",
 })
 
-const siteUrl = "https://dohadindia.org"
+const siteUrl = "https://www.dohadindia.org"
 const siteTitle = "DOHaD India – Developmental Origins of Health and Disease Regional Society"
 const siteDescription =
   "DOHaD India Regional Society advances research, training, and policy on the developmental origins of health and disease in India, connecting researchers, clinicians, and policymakers."
@@ -25,7 +25,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: siteTitle,
   description: siteDescription,
-  generator: "v0.app",
+  alternates: {
+    canonical: "/",
+  },
   manifest: "/site.webmanifest",
   icons: {
     icon: [

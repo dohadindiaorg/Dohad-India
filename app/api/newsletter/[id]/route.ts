@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import NewsletterSubscriber from '@/lib/models/NewsletterSubscriber';
 import { invalidateNewsletterCache } from '@/lib/data/newsletter';
-import { jsonOk, jsonError, requireAdmin } from '@/lib/api/route-helpers';
+import { jsonOk, jsonError, jsonInternalError, logServerError, requireAdmin } from '@/lib/api/route-helpers';
 
 export async function DELETE(
   _request: NextRequest,
@@ -21,7 +21,8 @@ export async function DELETE(
 
     invalidateNewsletterCache();
     return jsonOk({ message: 'Subscriber deleted successfully' });
-  } catch (error: any) {
-    return jsonError(error.message);
+  } catch (error) {
+    logServerError('Failed to delete newsletter subscriber', error);
+    return jsonInternalError();
   }
 }

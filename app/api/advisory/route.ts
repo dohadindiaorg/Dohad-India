@@ -6,7 +6,7 @@ import {
   invalidateAdvisoryCache,
   queryAdvisoryMembers,
 } from '@/lib/data/advisory';
-import { jsonOk, jsonError, requireAdmin } from '@/lib/api/route-helpers';
+import { jsonOk, jsonInternalError, logServerError, requireAdmin } from '@/lib/api/route-helpers';
 import {
   WHO_WE_ARE_SECTIONS,
   type WhoWeAreSection,
@@ -39,8 +39,9 @@ export async function GET(request: NextRequest) {
       ? await queryAdvisoryMembers(section)
       : await getAdvisoryMembers();
     return jsonOk(members);
-  } catch (error: any) {
-    return jsonError(error.message);
+  } catch (error) {
+    logServerError('Failed to list advisory members', error);
+    return jsonInternalError();
   }
 }
 
@@ -55,7 +56,8 @@ export async function POST(request: NextRequest) {
     invalidateAdvisoryCache();
 
     return jsonOk(member, 201);
-  } catch (error: any) {
-    return jsonError(error.message);
+  } catch (error) {
+    logServerError('Failed to create advisory member', error);
+    return jsonInternalError();
   }
 }

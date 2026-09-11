@@ -1,7 +1,7 @@
 import { Header } from "@/components/header"
 import { LinkedInIcon } from "@/components/linkedin-icon"
 import { Mail, MapPin } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { ContactForm } from "@/components/contact-form"
 import { headingStyles } from "@/lib/utils"
 import {
   SECRETARIAT_ADDRESS_LINES,
@@ -133,62 +133,7 @@ export default function ContactPage() {
         <div className="bg-card border border-border rounded-lg p-6 shadow-sm mb-12">
           <h2 className={`${headingStyles} text-center mb-6`}>Send Us a Message</h2>
 
-          <div className="max-w-3xl mx-auto space-y-5">
-            <div className="grid md:grid-cols-2 gap-5">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  className="w-full px-4 py-2.5 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-foreground"
-                  placeholder="Your full name"
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  className="w-full px-4 py-2.5 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-foreground"
-                  placeholder="your.email@example.com"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2">
-                Subject - What is this regarding?
-              </label>
-              <input
-                type="text"
-                id="subject"
-                className="w-full px-4 py-2.5 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-foreground"
-                placeholder="What is this regarding?"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
-                Message
-              </label>
-              <textarea
-                id="message"
-                rows={4}
-                className="w-full px-4 py-2.5 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none text-foreground"
-                placeholder="Tell us more about your inquiry..."
-              ></textarea>
-            </div>
-
-            <div className="text-center">
-              <Button size="lg" className="bg-secondary text-secondary-foreground hover:bg-secondary/90 px-10">
-                Send Message
-              </Button>
-            </div>
-          </div>
+          <ContactForm />
         </div>
 
       </main>

@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import cloudinary from '@/lib/cloudinary';
-import { jsonOk, jsonError, requireAdmin } from '@/lib/api/route-helpers';
+import { jsonOk, jsonError, jsonInternalError, logServerError, requireAdmin } from '@/lib/api/route-helpers';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -14,14 +14,17 @@ const ALLOWED_MIME_TYPES = [
   'application/msword',
 ];
 
+const ALLOWED_FOLDERS = new Set(['dohad-india', 'advisory', 'events', 'pioneer', 'policies']);
+
 export async function POST(request: NextRequest) {
   try {
     const { unauthorized } = await requireAdmin();
     if (unauthorized) return unauthorized;
 
     const formData = await request.formData();
-    const file = formData.get('file') as File;
-    const folder = (formData.get('folder') as string) || 'dohad-india';
+    const file = formData.get('file') as File | null;
+    const requestedFolder = (formData.get('folder') as string) || 'dohad-india';
+    const folder = ALLOWED_FOLDERS.has(requestedFolder) ? requestedFolder : 'dohad-india';
 
     if (!file) {
       return jsonError('No file uploaded', 400);
@@ -49,9 +52,13 @@ export async function POST(request: NextRequest) {
         .end(buffer);
     });
 
-    return jsonOk(result);
-  } catch (error: any) {
-    console.error('Upload error:', error);
-    return jsonError(error.message);
+    return jsonOk({
+      secure_url: result.secure_url,
+      public_id: result.public_id,
+      resource_type: result.resource_type,
+    });
+  } catch (error) {
+    logServerError('Upload error', error);
+    return jsonInternalError();
   }
 }

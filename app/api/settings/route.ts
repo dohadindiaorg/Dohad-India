@@ -3,7 +3,7 @@ import {
   getSiteSettings,
   patchSiteSettings,
 } from '@/lib/data/site-settings';
-import { jsonOk, jsonError, requireAdmin } from '@/lib/api/route-helpers';
+import { jsonOk, jsonInternalError, logServerError, requireAdmin } from '@/lib/api/route-helpers';
 
 export async function GET() {
   try {
@@ -12,8 +12,9 @@ export async function GET() {
 
     const settings = await getSiteSettings();
     return jsonOk(settings);
-  } catch (error: any) {
-    return jsonError(error.message);
+  } catch (error) {
+    logServerError('Failed to load settings', error);
+    return jsonInternalError();
   }
 }
 
@@ -25,8 +26,9 @@ export async function PATCH(request: NextRequest) {
     const updates = await request.json();
     const settings = await patchSiteSettings(updates);
     return jsonOk(settings);
-  } catch (error: any) {
-    return jsonError(error.message);
+  } catch (error) {
+    logServerError('Failed to update settings', error);
+    return jsonInternalError();
   }
 }
 

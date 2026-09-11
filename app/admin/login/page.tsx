@@ -82,10 +82,10 @@ export default function AdminLoginPage() {
       const data = await res.json();
 
       if (res.ok) {
-        toast.success('Verification code sent to your email!');
+        toast.success(data.message || 'If the account exists, a password reset code has been sent.');
         setForgotStep('otp');
       } else {
-        toast.error(data.error || 'Failed to send verification code.');
+        toast.error(data.error || 'Unable to send a verification code right now.');
       }
     } catch (err) {
       toast.error('An error occurred. Please try again.');

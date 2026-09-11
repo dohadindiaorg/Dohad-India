@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import AdvisoryMember from '@/lib/models/AdvisoryMember';
 import { invalidateAdvisoryCache } from '@/lib/data/advisory';
-import { jsonOk, jsonError, requireAdmin } from '@/lib/api/route-helpers';
+import { jsonOk, jsonError, jsonInternalError, logServerError, requireAdmin } from '@/lib/api/route-helpers';
 
 export async function DELETE(
   _request: NextRequest,
@@ -21,8 +21,9 @@ export async function DELETE(
 
     invalidateAdvisoryCache();
     return jsonOk({ message: 'Member deleted successfully' });
-  } catch (error: any) {
-    return jsonError(error.message);
+  } catch (error) {
+    logServerError('Failed to delete advisory member', error);
+    return jsonInternalError();
   }
 }
 
@@ -48,7 +49,8 @@ export async function PUT(
 
     invalidateAdvisoryCache();
     return jsonOk(member);
-  } catch (error: any) {
-    return jsonError(error.message);
+  } catch (error) {
+    logServerError('Failed to update advisory member', error);
+    return jsonInternalError();
   }
 }

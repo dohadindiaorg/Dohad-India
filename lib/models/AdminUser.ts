@@ -34,6 +34,17 @@ const AdminUserSchema = new Schema({
   resetOtpExpires: {
     type: Date,
   },
+  resetOtpAttempts: {
+    type: Number,
+    default: 0,
+  },
+  resetOtpSentAt: {
+    type: Date,
+  },
+  sessionVersion: {
+    type: Number,
+    default: 0,
+  },
 }, { timestamps: true });
 
 export default models.AdminUser || model('AdminUser', AdminUserSchema);

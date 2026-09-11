@@ -5,7 +5,9 @@ import {
   getNewsletterSubscribers,
   invalidateNewsletterCache,
 } from '@/lib/data/newsletter';
-import { jsonOk, jsonError, requireAdmin } from '@/lib/api/route-helpers';
+import { jsonOk, jsonError, jsonInternalError, logServerError, requireAdmin } from '@/lib/api/route-helpers';
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function GET() {
   try {
@@ -14,30 +16,51 @@ export async function GET() {
 
     const subscribers = await getNewsletterSubscribers();
     return jsonOk(subscribers);
-  } catch (error: any) {
-    return jsonError(error.message);
+  } catch (error) {
+    logServerError('Failed to list newsletter subscribers', error);
+    return jsonInternalError();
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    await dbConnect();
-    const data = await request.json();
-
-    if (!data.email) {
-      return jsonError('Email is required', 400);
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return jsonError('Invalid request', 400);
     }
 
-    const existing = await NewsletterSubscriber.findOne({ email: data.email }).lean();
+    const data = body as { email?: unknown; name?: unknown; affiliation?: unknown };
+    const email = typeof data.email === 'string' ? data.email.toLowerCase().trim() : '';
+    const name = typeof data.name === 'string' ? data.name.trim().slice(0, 200) : '';
+    const affiliation =
+      typeof data.affiliation === 'string' ? data.affiliation.trim().slice(0, 200) : '';
+
+    if (!email || !EMAIL_PATTERN.test(email) || email.length > 254) {
+      return jsonError('Please provide a valid email address', 400);
+    }
+
+    await dbConnect();
+
+    const existing = await NewsletterSubscriber.findOne({ email }).lean();
     if (existing) {
       return jsonOk({ message: 'Already subscribed' });
     }
 
-    const subscriber = await NewsletterSubscriber.create(data);
+    const subscriber = await NewsletterSubscriber.create({
+      email,
+      name: name || 'Subscriber',
+      affiliation: affiliation || undefined,
+    });
     invalidateNewsletterCache();
 
-    return jsonOk(subscriber, 201);
+    return jsonOk({ id: subscriber._id, message: 'Subscribed' }, 201);
   } catch (error: any) {
-    return jsonError(error.message);
+    if (error?.code === 11000) {
+      return jsonOk({ message: 'Already subscribed' });
+    }
+    logServerError('Failed to subscribe to newsletter', error);
+    return jsonInternalError();
   }
 }

@@ -57,9 +57,8 @@ export async function queryEvents(options: {
 }) {
   await dbConnect();
 
-  const filter: Record<string, unknown> = {};
+  const filter: Record<string, unknown> = { published: true };
   if (options.category) filter.category = options.category;
-  if (options.published === true) filter.published = true;
   if (options.featured === true) filter.featured = true;
 
   return Event.find(filter)

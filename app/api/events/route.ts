@@ -8,7 +8,7 @@ import {
   resolveUniqueEventSlug,
   slugifyTitle,
 } from '@/lib/data/events';
-import { jsonOk, jsonError, requireAdmin } from '@/lib/api/route-helpers';
+import { jsonOk, jsonError, jsonInternalError, logServerError, requireAdmin } from '@/lib/api/route-helpers';
 import { parseEventDateInput } from '@/lib/event-dates';
 
 export const dynamic = 'force-dynamic';
@@ -25,14 +25,20 @@ export async function GET(request: NextRequest) {
     }
 
     const category = searchParams.get('category') ?? undefined;
-    const published = searchParams.get('published') === 'true' ? true : undefined;
     const featured = searchParams.get('featured') === 'true' ? true : undefined;
-    const limit = parseInt(searchParams.get('limit') || '50', 10);
+    const parsedLimit = parseInt(searchParams.get('limit') || '50', 10);
+    const limit = Number.isFinite(parsedLimit) ? Math.min(Math.max(parsedLimit, 1), 100) : 50;
 
-    const events = await queryEvents({ category, published, featured, limit });
+    const events = await queryEvents({
+      category,
+      published: true,
+      featured,
+      limit,
+    });
     return jsonOk(events);
-  } catch (error: any) {
-    return jsonError(error.message);
+  } catch (error) {
+    logServerError('Failed to list events', error);
+    return jsonInternalError();
   }
 }
 
@@ -64,6 +70,7 @@ export async function POST(request: NextRequest) {
     if (error?.code === 11000) {
       return jsonError('An event with this slug already exists', 409);
     }
-    return jsonError(error.message);
+    logServerError('Failed to create event', error);
+    return jsonInternalError();
   }
 }

@@ -1,33 +1,64 @@
 import dbConnect from '@/lib/mongodb';
 import AdminUser from '@/lib/models/AdminUser';
-import { jsonOk, jsonError } from '@/lib/api/route-helpers';
+import { jsonOk, jsonError, jsonInternalError, logServerError } from '@/lib/api/route-helpers';
 import { sendEmail } from '@/lib/email';
+import {
+  clientIp,
+  consumeIpSendSlot,
+  generateOtp,
+  hashOtp,
+  isSendCooldownActive,
+  otpExpiryDate,
+} from '@/lib/otp';
+
+const GENERIC_OTP_MESSAGE =
+  'If the account exists, a password reset code has been sent.';
 
 export async function POST(request: Request) {
   try {
-    await dbConnect();
-    const { email } = await request.json();
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return jsonError('Invalid request', 400);
+    }
+
+    const email = typeof body === 'object' && body && 'email' in body
+      ? (body as { email?: unknown }).email
+      : undefined;
 
     if (!email || typeof email !== 'string' || !email.includes('@')) {
       return jsonError('Please provide a valid email address', 400);
     }
 
     const normalizedEmail = email.toLowerCase().trim();
+    if (normalizedEmail.length > 254) {
+      return jsonError('Please provide a valid email address', 400);
+    }
+
+    const ipLimit = consumeIpSendSlot(clientIp(request));
+    if (!ipLimit.allowed) {
+      return jsonError('Please wait before requesting another code.', 429);
+    }
+
+    await dbConnect();
     const admin = await AdminUser.findOne({ email: normalizedEmail });
 
     if (!admin) {
-      return jsonError('No administrator found with this email address', 404);
+      return jsonOk({ message: GENERIC_OTP_MESSAGE });
     }
 
-    // Generate a 6-digit numeric OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    if (isSendCooldownActive(admin.resetOtpSentAt)) {
+      return jsonOk({ message: GENERIC_OTP_MESSAGE });
+    }
 
-    admin.resetOtp = otp;
-    admin.resetOtpExpires = expiry;
+    const otp = generateOtp();
+    admin.resetOtp = hashOtp(otp);
+    admin.resetOtpExpires = otpExpiryDate();
+    admin.resetOtpAttempts = 0;
+    admin.resetOtpSentAt = new Date();
     await admin.save();
 
-    // Send email via configured SMTP (Microsoft 365)
     const htmlContent = `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
         <h2 style="color: #0ea5e9; text-align: center; font-family: Outfit, sans-serif;">DOHaD India CMS</h2>
@@ -42,15 +73,25 @@ export async function POST(request: Request) {
       </div>
     `;
 
-    await sendEmail({
-      to: admin.email,
-      subject: `${otp} is your DOHaD India CMS reset code`,
-      html: htmlContent,
-    });
+    try {
+      await sendEmail({
+        to: admin.email,
+        subject: 'Your DOHaD India CMS password reset code',
+        html: htmlContent,
+      });
+    } catch (error) {
+      logServerError('Failed to send admin OTP email', error);
+      admin.resetOtp = undefined;
+      admin.resetOtpExpires = undefined;
+      admin.resetOtpAttempts = 0;
+      admin.resetOtpSentAt = undefined;
+      await admin.save();
+      return jsonInternalError();
+    }
 
-    return jsonOk({ message: 'OTP sent successfully' });
-  } catch (error: any) {
-    console.error('Error sending OTP:', error);
-    return jsonError(error.message || 'Failed to send OTP email');
+    return jsonOk({ message: GENERIC_OTP_MESSAGE });
+  } catch (error) {
+    logServerError('Error sending OTP', error);
+    return jsonInternalError();
   }
 }
