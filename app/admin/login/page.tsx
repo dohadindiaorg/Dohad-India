@@ -271,7 +271,7 @@ export default function AdminLoginPage() {
                   <Input
                     id="forgot-email"
                     type="email"
-                    placeholder="dohadindiaorg@gmail.com"
+                    placeholder="administrator email"
                     className="pl-10"
                     value={forgotEmail}
                     onChange={(e) => setForgotEmail(e.target.value)}

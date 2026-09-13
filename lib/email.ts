@@ -28,6 +28,18 @@ export function getContactRecipient() {
   return 'contact@dohadindia.org';
 }
 
+export function getAdminOtpRecipient() {
+  const configured = process.env.ADMIN_EMAIL || '';
+  const match = configured.match(/<([^>]+)>/);
+  const address = (match ? match[1] : configured).trim().toLowerCase();
+
+  if (!address || !address.includes('@')) {
+    throw new Error('ADMIN_EMAIL is not configured');
+  }
+
+  return address;
+}
+
 export async function sendEmail({
   to,
   subject,

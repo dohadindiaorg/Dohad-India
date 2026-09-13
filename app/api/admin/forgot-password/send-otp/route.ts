@@ -1,7 +1,7 @@
 import dbConnect from '@/lib/mongodb';
 import AdminUser from '@/lib/models/AdminUser';
 import { jsonOk, jsonError, jsonInternalError, logServerError } from '@/lib/api/route-helpers';
-import { sendEmail } from '@/lib/email';
+import { getAdminOtpRecipient, sendEmail } from '@/lib/email';
 import {
   clientIp,
   consumeIpSendSlot,
@@ -75,7 +75,7 @@ export async function POST(request: Request) {
 
     try {
       await sendEmail({
-        to: admin.email,
+        to: getAdminOtpRecipient(),
         subject: 'Your DOHaD India CMS password reset code',
         html: htmlContent,
       });
