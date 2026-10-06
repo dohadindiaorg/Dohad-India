@@ -11,8 +11,6 @@ import LearnAboutDOHaD from "@/components/learn-dohad"
 
 import { getSiteSettings } from "@/lib/data/site-settings"
 
-export const revalidate = 60
-
 export default async function HomePage() {
   let settings = null
   try {

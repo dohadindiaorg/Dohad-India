@@ -24,13 +24,13 @@ export async function POST(request: Request) {
     const admin = await AdminUser.findOne({ username }).lean();
 
     if (!admin) {
-      return jsonError('Username is wrong.', 401);
+      return jsonError('Invalid username or password.', 401);
     }
 
     const isMatch = await bcrypt.compare(password, admin.password);
 
     if (!isMatch) {
-      return jsonError('Your password is wrong.', 401);
+      return jsonError('Invalid username or password.', 401);
     }
 
     const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);

@@ -28,7 +28,7 @@ export default function JoinUsPage() {
     {
       icon: <Users className="w-6 h-6" />,
       title: "International Membership",
-      description: "Membership in DOHaD India also includes a free membership of the International DOHaD Society",
+      description: "To become a member of DOHaD India, individuals must first join the International DOHaD Society and select DOHaD India as their Regional Society.",
     },
   ]
 
@@ -77,7 +77,7 @@ export default function JoinUsPage() {
             <h2 className={`${headingStyles} mb-4 md:mb-6`}>Who Can Become a Member?</h2>
             <div className="w-24 h-1 bg-secondary mx-auto rounded-full mb-6 md:mb-8" />
             <p className="text-sm md:text-base xl:text-lg 2xl:text-xl text-muted-foreground leading-relaxed max-w-4xl mx-auto">
-              Membership is open to anyone interested in DOHaD research, policy, and practice. This includes researchers, clinicians, policymakers, students, and professionals from related fields. Membership in DOHaD India also includes free membership to the International DOHaD Society, connecting you to a global network.
+              Membership is open to anyone interested in DOHaD research, policy, and practice. This includes researchers, clinicians, policymakers, students, and professionals from related fields.
             </p>
           </div>
         </section>
@@ -107,7 +107,10 @@ export default function JoinUsPage() {
             </div>
           </div>
           <p className="text-center text-xs md:text-sm xl:text-base text-muted-foreground mt-8 xl:mt-12 italic">
-            Membership fees will be solely utilized to support regional society activities in India.
+            The DOHaD India annual fee supports our website maintenance and contributes towards other activities undertaken by the DOHaD India Regional Society.
+          </p>
+          <p className="text-center text-xs md:text-sm xl:text-base text-muted-foreground mt-2 italic">
+            Eligibility for reduced International Society LMIC/MIC membership rates is determined by the member's country of residence and work, in accordance with International Society membership policies.
           </p>
         </section>
 
@@ -122,7 +125,7 @@ export default function JoinUsPage() {
                 Join the DOHaD India community and help advance research, collaboration, and awareness across the region.
               </p>
               <p className="text-xs md:text-sm xl:text-lg 2xl:text-xl opacity-80 mb-8 md:mb-12">
-                To join, visit the <a href="https://dohadsoc.org/join-us/" target="_blank" rel="noopener noreferrer" className="underline font-bold hover:text-white transition-colors">International DOHaD Society</a> website and select <strong>DOHaD India</strong> as your Regional Society. A nominal membership fee applies.
+                International Society membership fees are separate and remain payable according to the member's applicable membership category.
               </p>
               <a
                 href="https://dohadsoc.org/join-us/"

@@ -14,7 +14,7 @@ import { Button, buttonVariants } from '@/components/ui/button'
 function Calendar({
   className,
   classNames,
-  outsideDays = 'show',
+  showOutsideDays = true,
   captionLayout = 'label',
   buttonVariant = 'ghost',
   formatters,
@@ -27,7 +27,7 @@ function Calendar({
 
   return (
     <DayPicker
-      outsideDays={outsideDays}
+      showOutsideDays={showOutsideDays}
       className={cn(
         'bg-background group/calendar p-3 [--cell-size:2rem] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent',
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
@@ -155,11 +155,11 @@ function Calendar({
           )
         },
         DayButton: CalendarDayButton,
-        WeekNumber: ({ weekNumber, dates, ...props }) => {
+        WeekNumber: ({ week, ...props }) => {
           return (
             <td {...props}>
               <div className="flex size-[--cell-size] items-center justify-center text-center">
-                {weekNumber}
+                {week.weekNumber}
               </div>
             </td>
           )

@@ -36,8 +36,8 @@ export async function getVerifiedAdminSession(): Promise<AdminSession | null> {
       return null;
     }
 
-    const tokenRole = user.role || 'admin';
-    if (!ADMIN_ROLES.has(tokenRole)) {
+    const tokenRole = user.role;
+    if (!tokenRole || !ADMIN_ROLES.has(tokenRole)) {
       return null;
     }
 
@@ -50,8 +50,8 @@ export async function getVerifiedAdminSession(): Promise<AdminSession | null> {
       return null;
     }
 
-    const dbRole = admin.role || 'admin';
-    if (!ADMIN_ROLES.has(dbRole)) {
+    const dbRole = admin.role;
+    if (!dbRole || !ADMIN_ROLES.has(dbRole)) {
       return null;
     }
 

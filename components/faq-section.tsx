@@ -4,7 +4,9 @@ import React from "react"
 import { useState } from "react"
 import { ChevronDown, HelpCircle } from "lucide-react"
 
-const faqData = [
+type FAQData = Omit<FAQItemProps, "index" | "isOpen" | "onToggle">
+
+const faqData: FAQData[] = [
   {
     question: "What is DOHaD and why is it important?",
     answer:
@@ -18,9 +20,7 @@ const faqData = [
   {
     question: "Who can become a member of DOHaD India?",
     answer:
-      "Membership is open to anyone interested in DOHaD research, policy, and practice in India and the South Asian region.",
-    hasHighlight: true,
-    highlightText: "🎁 Membership in DOHaD India includes free membership in the International DOHaD Society!",
+      "Membership is open to anyone interested in DOHaD research, policy, and practice in India and the South Asian region. To become a member of DOHaD India, individuals must first join the International DOHaD Society and select DOHaD India as their Regional Society.",
   },
   {
     question: "What are the benefits of becoming a member?",
@@ -31,7 +31,7 @@ const faqData = [
     question: "How do I become a member?",
     hasLink: true,
     answer:
-      "To become a member, you need to join the International DOHaD Society and select DOHaD India as your regional society. DOHaD India will then share a welcome note to formally invite you as a member, and share payment details for the nominal annual membership fee.",
+      "International Society membership fees are separate and remain payable according to the member's applicable membership category.",
   },
   {
     question: "How much does a membership cost?",
@@ -42,7 +42,7 @@ const faqData = [
       { category: "Training / early career researchers (within 5 years of PhD)", fee: "Rs 500" },
       { category: "Masters and undergraduate students", fee: "Rs 250" },
     ],
-    tableFooter: "Membership fees will be solely utilized to support regional society activities in India.",
+    tableFooter: "The DOHaD India annual fee supports our website maintenance and contributes towards other activities undertaken by the DOHaD India Regional Society. Eligibility for reduced International Society LMIC/MIC membership rates is determined by the member's country of residence and work, in accordance with International Society membership policies.",
   },
 ]
 

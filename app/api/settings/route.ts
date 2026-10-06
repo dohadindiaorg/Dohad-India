@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import {
   getSiteSettings,
   patchSiteSettings,
@@ -25,6 +26,10 @@ export async function PATCH(request: NextRequest) {
 
     const updates = await request.json();
     const settings = await patchSiteSettings(updates);
+    
+    // Trigger on-demand regeneration of the homepage to apply settings immediately
+    revalidatePath('/');
+    
     return jsonOk(settings);
   } catch (error) {
     logServerError('Failed to update settings', error);
