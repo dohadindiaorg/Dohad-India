@@ -7,6 +7,7 @@ import { FooterSection } from "@/components/footer-section"
 import { Toaster } from "@/components/ui/sonner"
 import { getSiteSettings } from "@/lib/data/site-settings"
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const revalidate = 60
 
@@ -82,6 +83,7 @@ export default async function RootLayout({
           <Toaster richColors position="top-center" />
         </ThemeProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
