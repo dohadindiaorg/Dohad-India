@@ -23,6 +23,8 @@ export const getSiteSettings = unstable_cache(
 );
 
 export async function patchSiteSettings(updates: Record<string, unknown>) {
+  delete (updates as any)._id;
+  delete (updates as any).__v;
   await dbConnect();
 
   const existing = await SiteSettings.findOne();

@@ -32,4 +32,34 @@ export const ADMIN_SECTIONS = [
     description: 'Contact details, social links, and site information',
     href: '/admin/settings',
   },
+  {
+    label: 'FAQs',
+    description: 'Add, edit, or reorder homepage frequently asked questions',
+    href: '/admin/faqs',
+  },
+  {
+    label: 'Membership',
+    description: 'Manage membership tiers, fees, notes, and registration links',
+    href: '/admin/membership',
+  },
+  {
+    label: 'Research Pillars',
+    description: 'Manage homepage research focus areas and bento cards',
+    href: '/admin/research-pillars',
+  },
+  {
+    label: 'Special Narratives',
+    description: 'Edit Capacity Building, Advocacy, and Outreach sections',
+    href: '/admin/narratives',
+  },
+  {
+    label: 'Legal Pages',
+    description: 'Edit Privacy Policy and Terms & Conditions',
+    href: '/admin/legal',
+  },
+  {
+    label: 'Navigation & Menus',
+    description: 'Customize Header and Footer navigation links, buttons, and notices',
+    href: '/admin/navigation',
+  },
 ] as const;

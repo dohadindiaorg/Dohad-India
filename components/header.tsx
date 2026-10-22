@@ -13,25 +13,62 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  NavigationSettings,
+  DEFAULT_NAVIGATION,
+} from "@/lib/cms-defaults"
 
-export function Header() {
+export function Header({
+  navigation,
+}: {
+  navigation?: NavigationSettings["header"]
+}) {
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false)
+  const [navData, setNavData] = React.useState<NavigationSettings["header"]>(
+    navigation || DEFAULT_NAVIGATION.header
+  )
 
-  const navItems = [
-    { name: "Home", href: "/" },
-    {
-      name: "Who We Are",
-      href: "/who-are-we",
-      subItems: [
-        { name: "Our Team", href: "/who-are-we" },
-        { name: "Equity & Diversity", href: "/who-are-we/equity-diversity" },
-        { name: "Governance", href: "/who-are-we/governance" },
-      ],
-    },
-    { name: "Join Us", href: "/join-us" },
-    { name: "Events", href: "/events" },
-    { name: "Contact", href: "/contact" },
-  ]
+  React.useEffect(() => {
+    if (navigation) {
+      setNavData(navigation)
+      return
+    }
+
+    async function loadNav() {
+      try {
+        const res = await fetch("/api/settings")
+        if (res.ok) {
+          const s = await res.json()
+          if (s?.navigation?.header) {
+            setNavData({
+              tagline:
+                s.navigation.header.tagline !== undefined
+                  ? s.navigation.header.tagline
+                  : DEFAULT_NAVIGATION.header.tagline,
+              ctaText:
+                s.navigation.header.ctaText !== undefined
+                  ? s.navigation.header.ctaText
+                  : DEFAULT_NAVIGATION.header.ctaText,
+              ctaLink:
+                s.navigation.header.ctaLink !== undefined
+                  ? s.navigation.header.ctaLink
+                  : DEFAULT_NAVIGATION.header.ctaLink,
+              navItems:
+                Array.isArray(s.navigation.header.navItems) &&
+                s.navigation.header.navItems.length > 0
+                  ? s.navigation.header.navItems
+                  : DEFAULT_NAVIGATION.header.navItems,
+            })
+          }
+        }
+      } catch {
+        // Fallback silently to defaults
+      }
+    }
+    loadNav()
+  }, [navigation])
+
+  const navItems = navData.navItems
 
   return (
     <header className="sticky top-0 z-50 w-full py-2 sm:py-2.5 xl:py-4 px-4 sm:px-6 bg-background/95 border-b border-border backdrop-blur-sm">
@@ -48,7 +85,7 @@ export function Header() {
           </Link>
           <div className="flex flex-col">
             <p className="text-[9px] sm:text-xs lg:text-[10px] xl:text-sm text-muted-foreground max-w-[180px] sm:max-w-[320px] lg:max-w-[200px] xl:max-w-[380px] leading-tight">
-              Advancing health through the developmental origins of health and disease research in India.
+              {navData.tagline}
             </p>
           </div>
         </div>
@@ -56,7 +93,7 @@ export function Header() {
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-2">
           {navItems.map((item) => {
-            if ('subItems' in item && item.subItems) {
+            if ('subItems' in item && item.subItems && item.subItems.length > 0) {
               return (
                 <DropdownMenu key={item.name} open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
                   <div
@@ -110,9 +147,9 @@ export function Header() {
         <div className="flex items-center gap-2 sm:gap-3">
           <ThemeToggle />
           {/* CTA visible on medium+ screens */}
-          <Link href="/join-us" className="hidden md:block">
+          <Link href={navData.ctaLink} className="hidden md:block">
             <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 px-4 sm:px-6 xl:px-8 py-2 xl:py-3 rounded-full font-medium shadow-sm text-sm sm:text-base xl:text-lg">
-              Become a Member
+              {navData.ctaText}
             </Button>
           </Link>
           {/* Mobile Menu */}
@@ -142,13 +179,13 @@ export function Header() {
                     <span className="text-xl font-bold">DOHaD India</span>
                   </div>
                   <p className="text-xs text-muted-foreground leading-tight">
-                    Advancing health through the developmental origins of health and disease research in India.
+                    {navData.tagline}
                   </p>
                 </div>
               </SheetHeader>
               <nav className="flex flex-col gap-4 mt-6">
                 {navItems.map((item) => {
-                  if ('subItems' in item && item.subItems) {
+                  if ('subItems' in item && item.subItems && item.subItems.length > 0) {
                     return (
                       <div key={item.name} className="flex flex-col gap-1">
                         <Link
@@ -182,9 +219,9 @@ export function Header() {
                     </Link>
                   )
                 })}
-                <Link href="/join-us" className="w-full mt-4">
+                <Link href={navData.ctaLink} className="w-full mt-4">
                   <Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 px-6 py-2 rounded-full font-medium shadow-sm w-full">
-                    Become a Member
+                    {navData.ctaText}
                   </Button>
                 </Link>
               </nav>

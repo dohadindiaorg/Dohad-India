@@ -56,6 +56,8 @@ interface FAQItemProps {
   highlightText?: string
   hasTable?: boolean
   hasLink?: boolean
+  linkText?: string
+  linkUrl?: string
   tableData?: Array<{ category: string; fee: string }>
   tableFooter?: string
 }
@@ -70,6 +72,8 @@ const FAQItem = ({
   highlightText,
   hasTable,
   hasLink,
+  linkText,
+  linkUrl,
   tableData,
   tableFooter,
 }: FAQItemProps) => {
@@ -121,17 +125,21 @@ const FAQItem = ({
                 <p className="mb-2.5 sm:mb-3">{answer}</p>
               )}
 
-              {/* Q5: How do I become a member — with hyperlink */}
+              {/* Hyperlink Section */}
               {hasLink && (
                 <p className="mb-2.5 sm:mb-3">
                   To become a member, you need to join the{" "}
                   <a
-                    href="https://dohadsoc.org/join-us/"
+                    href={
+                      linkUrl && /^(https?:\/\/|\/|#|mailto:)/i.test(linkUrl.trim())
+                        ? linkUrl
+                        : (linkUrl ? "#" : "https://dohadsoc.org/join-us/")
+                    }
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary underline hover:text-primary/80 font-semibold transition-colors"
                   >
-                    International DOHaD Society
+                    {linkText || "International DOHaD Society"}
                   </a>{" "}
                   and select DOHaD India as your regional society. DOHaD India will then share a welcome note to formally invite you as a member, and share payment details for the nominal annual membership fee.
                 </p>
@@ -193,8 +201,13 @@ const FAQItem = ({
   )
 }
 
-export function FAQSection() {
+export interface FAQSectionProps {
+  faqs?: FAQData[]
+}
+
+export function FAQSection({ faqs }: FAQSectionProps = {}) {
   const [openItems, setOpenItems] = useState<number[]>([])
+  const activeFaqs = faqs && Array.isArray(faqs) && faqs.length > 0 ? faqs : faqData
 
   const toggleItem = (index: number) => {
     setOpenItems(prev =>
@@ -229,7 +242,7 @@ export function FAQSection() {
 
       {/* FAQ Items */}
       <div className="w-full max-w-4xl relative z-10 space-y-3 xl:space-y-5">
-        {faqData.map((faq, index) => (
+        {activeFaqs.map((faq, index) => (
           <FAQItem
             key={index}
             question={faq.question}
@@ -241,6 +254,8 @@ export function FAQSection() {
             highlightText={faq.highlightText}
             hasTable={faq.hasTable}
             hasLink={faq.hasLink}
+            linkText={faq.linkText}
+            linkUrl={faq.linkUrl}
             tableData={faq.tableData}
             tableFooter={faq.tableFooter}
           />
