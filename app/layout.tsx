@@ -111,8 +111,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "REPLACE_WITH_GOOGLE_SEARCH_CONSOLE_TOKEN",
-    // bing: "REPLACE_WITH_BING_WEBMASTER_TOKEN",
+    google: "wJUk6I-8dL5wbsYmSzWYkRS8NVNrYKcdBkKhLtCYjXY",
   },
 }
 
@@ -131,6 +130,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${hindSiliguri.variable} antialiased`} suppressHydrationWarning>
       <head>
+        <meta name="google-site-verification" content="wJUk6I-8dL5wbsYmSzWYkRS8NVNrYKcdBkKhLtCYjXY" />
         <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
         <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
         <link rel="shortcut icon" href="/favicon.ico" />
