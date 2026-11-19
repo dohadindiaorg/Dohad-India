@@ -1,5 +1,6 @@
 export const revalidate = 60;
 
+import type { Metadata } from "next"
 import { Header } from "@/components/header"
 import { Camera } from "lucide-react"
 import Image from "next/image"
@@ -13,6 +14,22 @@ import { normalizeEventsPageSettings } from "@/lib/events-page-defaults"
 import { isPastEvent, isUpcomingEvent } from "@/lib/event-dates"
 import { normalizeGalleryImages } from "@/lib/gallery-images"
 import PastEventsGalleryVideo from "@/components/past-events-gallery-video"
+import { BreadcrumbSchema, EventSchema } from "@/components/json-ld"
+
+export const metadata: Metadata = {
+  title: "Events & Workshops",
+  description:
+    "Discover upcoming conferences, workshops, and scientific sessions advancing Developmental Origins of Health and Disease (DOHaD) research across India.",
+  alternates: {
+    canonical: "/events",
+  },
+  openGraph: {
+    title: "Events & Workshops | DOHaD India",
+    description:
+      "Discover upcoming conferences, workshops, and scientific sessions advancing Developmental Origins of Health and Disease (DOHaD) research across India.",
+    url: "https://www.dohadindia.org/events",
+  },
+}
 
 async function getPageData() {
   try {
@@ -75,6 +92,13 @@ export default async function EventsPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://www.dohadindia.org" },
+          { name: "Events", url: "https://www.dohadindia.org/events" },
+        ]}
+      />
+      <EventSchema events={upcomingEvents} />
 
       <main className="mx-auto pb-12">
         <div className="text-center mb-12 px-6 max-w-6xl mx-auto pt-12">

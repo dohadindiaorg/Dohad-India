@@ -1,9 +1,26 @@
+import type { Metadata } from "next"
 import { Header } from "@/components/header"
 import { Users, ShieldCheck, Download, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import dbConnect from "@/lib/mongodb"
 import SiteSettings from "@/lib/models/SiteSettings"
 import { getEquityPolicyList, normalizePolicies } from "@/lib/policy-documents"
+import { BreadcrumbSchema } from "@/components/json-ld"
+
+export const metadata: Metadata = {
+  title: "Equity, Diversity & Inclusion | DOHaD India",
+  description:
+    "Learn about DOHaD India's commitment to equity, diversity, inclusion, safeguarding, and ethical scientific practice.",
+  alternates: {
+    canonical: "/who-are-we/equity-diversity",
+  },
+  openGraph: {
+    title: "Equity, Diversity & Inclusion | DOHaD India",
+    description:
+      "Learn about DOHaD India's commitment to equity, diversity, inclusion, safeguarding, and ethical scientific practice.",
+    url: "https://www.dohadindia.org/who-are-we/equity-diversity",
+  },
+}
 
 const iconMap = {
   edi: Users,
@@ -44,6 +61,13 @@ export default async function EquityDiversityPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://www.dohadindia.org" },
+          { name: "Who We Are", url: "https://www.dohadindia.org/who-are-we" },
+          { name: "Equity & Diversity", url: "https://www.dohadindia.org/who-are-we/equity-diversity" },
+        ]}
+      />
 
       {/* Hero Section */}
       <section className="relative pt-20 pb-16 md:pt-28 md:pb-24 overflow-hidden flex flex-col items-center text-center px-6">

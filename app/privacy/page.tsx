@@ -1,9 +1,18 @@
 import React from "react";
+import type { Metadata } from "next";
 import { getSiteSettings } from "@/lib/data/site-settings";
 import { DEFAULT_LEGAL_PAGES, LegalDocument } from "@/lib/cms-defaults";
 import { LegalContentView } from "@/components/legal-content-view";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "Privacy Policy | DOHaD India",
+  description: "Privacy policy and personal data protection information for visitors of DOHaD India.",
+  alternates: {
+    canonical: "/privacy",
+  },
+};
 
 export default async function PrivacyPolicy() {
   let doc: LegalDocument = DEFAULT_LEGAL_PAGES.privacyPolicy;

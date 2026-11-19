@@ -8,8 +8,32 @@ import { BentoCarousel } from "@/components/four-pillars-section"
 import { Header } from "@/components/header"
 import Hero from "@/components/about-DOHaD"
 import LearnAboutDOHaD from "@/components/learn-dohad"
+import { FAQSchema } from "@/components/json-ld"
 
 import { getSiteSettings } from "@/lib/data/site-settings"
+
+const homeFaqs = [
+  {
+    question: "What is DOHaD and why is it important?",
+    answer:
+      "The Developmental Origins of Health and Disease (DOHaD) paradigm focuses on how early-life exposures, including during preconception and pregnancy, impact long-term health. The DOHaD India Regional Society is dedicated to advancing this science and creating evidence-based policies and practices, particularly within the Indian context.",
+  },
+  {
+    question: "What is the mission of DOHaD India?",
+    answer:
+      "DOHaD India aims to promote and coordinate research on the Developmental Origins of Health and Disease, while building the capacity of professionals through research, communication, and advocacy rooted in the Indian context.",
+  },
+  {
+    question: "Who can become a member of DOHaD India?",
+    answer:
+      "Membership is open to anyone interested in DOHaD research, policy, and practice in India and the South Asian region. Individuals join the International DOHaD Society and select DOHaD India as their Regional Society.",
+  },
+  {
+    question: "What are the benefits of becoming a member?",
+    answer:
+      "Members gain access to the Journal of Developmental Origins of Health and Disease, newsletters, discounted registration for international/regional conferences and workshops, and professional networking opportunities across India and internationally.",
+  },
+]
 
 export default async function HomePage() {
   let settings = null
@@ -21,6 +45,7 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-background relative">
+      <FAQSchema items={homeFaqs} />
       <Header />
       <div className="relative z-10">
         <main className="relative z-10">

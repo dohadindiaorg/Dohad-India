@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { Header } from "@/components/header"
 import { LinkedInIcon } from "@/components/linkedin-icon"
 import { Mail, MapPin } from "lucide-react"
@@ -9,11 +10,33 @@ import {
   SECRETARIAT_MAPS_URL,
   SECRETARIAT_ORG_LINES,
 } from "@/lib/site-contact"
+import { BreadcrumbSchema } from "@/components/json-ld"
+
+export const metadata: Metadata = {
+  title: "Contact Us | Secretariat & Inquiries",
+  description:
+    "Get in touch with the DOHaD India Secretariat for inquiries, membership, partnerships, and scientific collaborations.",
+  alternates: {
+    canonical: "/contact",
+  },
+  openGraph: {
+    title: "Contact Us | DOHaD India",
+    description:
+      "Get in touch with the DOHaD India Secretariat for inquiries, membership, partnerships, and scientific collaborations.",
+    url: "https://www.dohadindia.org/contact",
+  },
+}
 
 export default function ContactPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://www.dohadindia.org" },
+          { name: "Contact", url: "https://www.dohadindia.org/contact" },
+        ]}
+      />
 
       <main className="max-w-6xl mx-auto px-6 py-12">
         <div className="text-center mb-12">
