@@ -38,11 +38,11 @@ export default async function EventsPage() {
   const { events, pageContent } = await getPageData();
 
   const upcomingEvents = events
-    .filter((e: { startDate: string }) => isUpcomingEvent(e.startDate))
+    .filter((e: { startDate: string; endDate?: string }) => isUpcomingEvent(e.startDate, e.endDate))
     .reverse();
   const pastEvents = events.filter(
-    (e: { startDate: string; galleryImages?: string[] }) =>
-      isPastEvent(e.startDate) && Array.isArray(e.galleryImages) && e.galleryImages.length > 0
+    (e: { startDate: string; endDate?: string; galleryImages?: string[] }) =>
+      isPastEvent(e.startDate, e.endDate) && Array.isArray(e.galleryImages) && e.galleryImages.length > 0
   );
 
   type GallerySlide = {

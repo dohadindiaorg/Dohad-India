@@ -24,13 +24,14 @@ import {
   normalizeEventsPageSettings,
   type EventsPageSettings,
 } from '@/lib/events-page-defaults';
-import { isPastEvent, isUpcomingEvent } from '@/lib/event-dates';
+import { isPastEvent, isUpcomingEvent, formatEventDateRange } from '@/lib/event-dates';
 
 type EventRecord = {
   _id: string;
   title: string;
   slug: string;
   startDate: string;
+  endDate?: string;
   location?: string;
   featuredImage?: string;
   galleryImages?: string[];
@@ -138,11 +139,7 @@ function EventRow({
         <p className="font-semibold text-foreground truncate">{event.title}</p>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-sm text-muted-foreground">
           <span>
-            {new Date(event.startDate).toLocaleDateString('en-US', {
-              month: 'long',
-              day: 'numeric',
-              year: 'numeric',
-            })}
+            {formatEventDateRange(event.startDate, event.endDate)}
           </span>
           <span className="flex items-center gap-1">
             <MapPin size={12} />
@@ -273,10 +270,10 @@ export default function EventsAdminPage() {
 
   const { upcomingEvents, pastEvents, pastEventsForGallery } = useMemo(() => {
     const upcoming = events
-      .filter((e) => isUpcomingEvent(e.startDate))
+      .filter((e) => isUpcomingEvent(e.startDate, e.endDate))
       .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
     const past = events
-      .filter((e) => isPastEvent(e.startDate))
+      .filter((e) => isPastEvent(e.startDate, e.endDate))
       .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
     const pastWithGallery = past.filter(
       (e) => Array.isArray(e.galleryImages) && e.galleryImages.length > 0
