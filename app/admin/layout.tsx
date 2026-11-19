@@ -14,6 +14,12 @@ import {
   X,
   Users,
   FileText,
+  HelpCircle,
+  CreditCard,
+  FlaskConical,
+  Megaphone,
+  ShieldCheck,
+  Compass,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -27,6 +33,12 @@ const navIcons = {
   '/admin/advisory': Users,
   '/admin/documents': FileText,
   '/admin/settings': Settings,
+  '/admin/faqs': HelpCircle,
+  '/admin/membership': CreditCard,
+  '/admin/research-pillars': FlaskConical,
+  '/admin/narratives': Megaphone,
+  '/admin/legal': ShieldCheck,
+  '/admin/navigation': Compass,
 } as const;
 
 const sidebarItems = [

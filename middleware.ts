@@ -1,14 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { decrypt } from '@/lib/auth';
 
-const protectedRoutes = [
-  '/admin/dashboard',
-  '/admin/events',
-  '/admin/newsletter',
-  '/admin/advisory',
-  '/admin/documents',
-  '/admin/settings',
-];
 const publicRoutes = ['/admin/login'];
 const ADMIN_ROLES = new Set(['admin', 'superadmin']);
 
@@ -19,8 +11,8 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/admin/login', req.nextUrl));
   }
 
-  const isProtectedRoute = protectedRoutes.some(route => path.startsWith(route));
-  const isPublicRoute = publicRoutes.includes(path);
+  const isPublicRoute = publicRoutes.some(route => path.startsWith(route));
+  const isProtectedRoute = path.startsWith('/admin') && !isPublicRoute;
 
   const cookie = req.cookies.get('session')?.value;
   const session = cookie ? await decrypt(cookie).catch(() => null) : null;

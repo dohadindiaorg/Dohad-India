@@ -20,6 +20,7 @@ export default function NewEventPage() {
     shortDescription: '',
     featuredImage: '',
     startDate: '',
+    endDate: '',
     location: '',
     registrationLink: '',
   });
@@ -55,17 +56,29 @@ export default function NewEventPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (formData.endDate && formData.startDate && formData.endDate < formData.startDate) {
+      toast.error('End date cannot be earlier than start date');
+      return;
+    }
+
     setIsLoading(true);
 
     try {
+      const payload: Record<string, any> = {
+        ...formData,
+        eventType: 'conference',
+        published: true,
+      };
+
+      if (!payload.endDate) {
+        delete payload.endDate;
+      }
+
       const res = await fetch('/api/events', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          eventType: 'conference',
-          published: true,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (res.ok) {
@@ -96,7 +109,7 @@ export default function NewEventPage() {
         </Button>
         <h1 className="text-3xl font-bold text-foreground">Add Upcoming Event</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Create an event with a future date. It appears as a card on your events page.
+          Create an event with a single date or date range. It appears as a card on your events page.
         </p>
       </div>
 
@@ -114,16 +127,32 @@ export default function NewEventPage() {
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="startDate">Date*</Label>
-            <Input
-              id="startDate"
-              name="startDate"
-              type="date"
-              value={formData.startDate}
-              onChange={handleInputChange}
-              required
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="startDate">Start Date*</Label>
+              <Input
+                id="startDate"
+                name="startDate"
+                type="date"
+                value={formData.startDate}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="endDate">End Date (optional)</Label>
+              <Input
+                id="endDate"
+                name="endDate"
+                type="date"
+                value={formData.endDate}
+                onChange={handleInputChange}
+                min={formData.startDate || undefined}
+              />
+              <p className="text-xs text-muted-foreground">
+                For multi-day events (e.g. Oct 10 to 12). Leave blank for single-day.
+              </p>
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -133,7 +162,7 @@ export default function NewEventPage() {
               name="location"
               value={formData.location}
               onChange={handleInputChange}
-              placeholder="e.g. Bangalore, India"
+              placeholder="e.g. Bangalore, India (or Online / Hybrid)"
             />
           </div>
 

@@ -141,6 +141,227 @@ const SiteSettingsSchema = new Schema({
       },
     },
   },
+  faqs: {
+    type: [
+      {
+        question: { type: String, required: true },
+        answer: { type: String, default: '' },
+        hasLink: { type: Boolean, default: false },
+        linkText: { type: String, default: '' },
+        linkUrl: { type: String, default: '' },
+        hasTable: { type: Boolean, default: false },
+        tableData: [
+          {
+            category: { type: String, default: '' },
+            fee: { type: String, default: '' },
+          },
+        ],
+        tableFooter: { type: String, default: '' },
+        order: { type: Number, default: 0 },
+      },
+    ],
+    default: undefined,
+  },
+  membershipPage: {
+    hero: {
+      title: { type: String, default: "Join Our Community & Advance DOHaD Research" },
+      description: {
+        type: String,
+        default: "Be part of India's leading network of researchers and professionals working on the developmental origins of health and disease. Collaborate, learn, and grow with us.",
+      },
+    },
+    whoCanJoin: {
+      title: { type: String, default: "Who Can Become a Member?" },
+      content: {
+        type: String,
+        default: "Membership is open to anyone interested in DOHaD research, policy, and practice. This includes researchers, clinicians, policymakers, students, and professionals from related fields.",
+      },
+    },
+    tiers: {
+      type: [
+        {
+          name: { type: String, required: true },
+          fee: { type: String, required: true },
+          period: { type: String, default: "Annual Fee" },
+          order: { type: Number, default: 0 },
+        },
+      ],
+      default: undefined,
+    },
+    tierNotes: {
+      note1: {
+        type: String,
+        default: "The DOHaD India annual fee supports our website maintenance and contributes towards other activities undertaken by the DOHaD India Regional Society.",
+      },
+      note2: {
+        type: String,
+        default: "Eligibility for reduced International Society LMIC/MIC membership rates is determined by the member's country of residence and work, in accordance with International Society membership policies.",
+      },
+    },
+    howToJoin: {
+      title: { type: String, default: "How to Become a Member" },
+      description1: {
+        type: String,
+        default: "Join the DOHaD India community and help advance research, collaboration, and awareness across the region.",
+      },
+      description2: {
+        type: String,
+        default: "International Society membership fees are separate and remain payable according to the member's applicable membership category.",
+      },
+      buttonText: { type: String, default: "Go to Registration" },
+      buttonLink: { type: String, default: "https://dohadsoc.org/join-us/" },
+    },
+  },
+  researchFocus: {
+    title: {
+      type: String,
+      default: "Research Focus Areas",
+    },
+    subtitle: {
+      type: String,
+      default:
+        "Our research spans multiple disciplines to understand how early-life exposures affect long-term health outcomes in Indian populations",
+    },
+    pillars: {
+      type: [
+        {
+          title: { type: String, required: true },
+          description: { type: String, default: "" },
+          icon: { type: String, default: "Dna" },
+          order: { type: Number, default: 0 },
+        },
+      ],
+      default: undefined,
+    },
+  },
+  narratives: {
+    capacityBuilding: {
+      title: { type: String, default: "Capacity Building" },
+      subtitle: {
+        type: String,
+        default:
+          "We support the next generation of DOHaD researchers through structured training and hands-on experience.",
+      },
+      buttonText: {
+        type: String,
+        default: "View Upcoming Events & Workshops",
+      },
+      buttonLink: { type: String, default: "/events" },
+      items: {
+        type: [
+          {
+            title: { type: String },
+            description: { type: String },
+            icon: { type: String, default: "GraduationCap" },
+          },
+        ],
+        default: undefined,
+      },
+    },
+    advocacy: {
+      title: {
+        type: String,
+        default: "National Impact through Engagement",
+      },
+      subtitle: {
+        type: String,
+        default:
+          "We bridge the gap between scientific discovery and public health action, collaborating with stakeholders across India to ensure early-life health is a national priority.",
+      },
+      items: {
+        type: [
+          {
+            title: { type: String },
+            description: { type: String },
+            icon: { type: String, default: "FileHeart" },
+          },
+        ],
+        default: undefined,
+      },
+    },
+    communication: {
+      title: {
+        type: String,
+        default: "Communication & Outreach",
+      },
+      subtitle: {
+        type: String,
+        default:
+          "We actively promote and disseminate DOHaD research across India and globally through multiple communication platforms",
+      },
+      webinarsTitle: { type: String, default: "Webinars & Events" },
+      webinarsDescription: {
+        type: String,
+        default:
+          "Regular webinars featuring renowned Indian and international experts to share emerging insights from DOHaD research.",
+      },
+      webinarsBullets: {
+        type: [String],
+        default: [
+          "Expert talks on emerging DOHaD research",
+          "Methods workshops for practical skills",
+          "Policy roundtables for collaborative discussions",
+        ],
+      },
+      followUsTitle: { type: String, default: "Follow Us" },
+      followUsDescription: {
+        type: String,
+        default:
+          "Stay updated with carefully curated insights on recent publications, events, funding opportunities, and valuable member contributions.",
+      },
+    },
+  },
+  legalPages: {
+    privacyPolicy: {
+      title: { type: String, default: 'Privacy Policy' },
+      lastUpdated: { type: String, default: '12 April 2022' },
+      sections: {
+        type: [
+          {
+            id: { type: String },
+            title: { type: String },
+            content: { type: String },
+          },
+        ],
+        default: undefined,
+      },
+    },
+    termsOfService: {
+      title: { type: String, default: 'Terms & Conditions' },
+      lastUpdated: { type: String, default: '' },
+      sections: {
+        type: [
+          {
+            id: { type: String },
+            title: { type: String },
+            content: { type: String },
+          },
+        ],
+        default: undefined,
+      },
+    },
+  },
+  navigation: {
+    header: {
+      tagline: {
+        type: String,
+        default:
+          'Advancing health through the developmental origins of health and disease research in India.',
+      },
+      ctaText: { type: String, default: 'Become a Member' },
+      ctaLink: { type: String, default: '/join-us' },
+      navItems: { type: Array, default: undefined },
+    },
+    footer: {
+      copyrightText: {
+        type: String,
+        default: 'DOHaD India Regional Society. All rights reserved.',
+      },
+      contactEmail: { type: String, default: 'contact@dohadindia.org' },
+      quickLinks: { type: Array, default: undefined },
+      engagementLinks: { type: Array, default: undefined },
+    },
+  },
   footerText: { type: String },
 }, { timestamps: true });
 

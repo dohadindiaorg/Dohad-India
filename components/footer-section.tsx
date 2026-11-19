@@ -9,6 +9,7 @@ import {
   SECRETARIAT_MAPS_URL,
   SECRETARIAT_ORG_LINES,
 } from "@/lib/site-contact"
+import { DEFAULT_NAVIGATION } from "@/lib/cms-defaults"
 
 // Brand SVG icons
 const XIcon = () => (
@@ -31,6 +32,25 @@ const BlueskyIcon = () => (
 
 export function FooterSection({ settings }: { settings?: any }) {
   const socialLinks = settings?.socialLinks || {}
+
+  const navFooter = settings?.navigation?.footer
+  const quickLinks =
+    Array.isArray(navFooter?.quickLinks) && navFooter.quickLinks.length > 0
+      ? navFooter.quickLinks
+      : DEFAULT_NAVIGATION.footer.quickLinks
+
+  const engagementLinks =
+    Array.isArray(navFooter?.engagementLinks) && navFooter.engagementLinks.length > 0
+      ? navFooter.engagementLinks
+      : DEFAULT_NAVIGATION.footer.engagementLinks
+
+  const contactEmail =
+    navFooter?.contactEmail || DEFAULT_NAVIGATION.footer.contactEmail || "contact@dohadindia.org"
+
+  const copyrightText =
+    navFooter?.copyrightText ||
+    DEFAULT_NAVIGATION.footer.copyrightText ||
+    "DOHaD India Regional Society. All rights reserved."
 
   return (
     <footer id="contact" className="w-full pt-8 pb-8 xl:pt-16 xl:pb-16 2xl:pt-24 2xl:pb-24 relative bg-secondary dark:bg-black overflow-hidden">
@@ -103,13 +123,7 @@ export function FooterSection({ settings }: { settings?: any }) {
           <div>
             <h4 className="text-sm xl:text-base 2xl:text-lg font-bold mb-3 xl:mb-5 text-white tracking-wide">Quick Links</h4>
             <ul className="space-y-2 xl:space-y-3 text-[11px] sm:text-xs xl:text-sm 2xl:text-base">
-              {[
-                { name: "About DOHaD", link: "/#about-pillars-section" },
-                { name: "Research", link: "/#features-section" },
-                { name: "Capacity Building", link: "/#capacity-building-section" },
-                { name: "Advocacy", link: "/#advocacy-section" },
-                { name: "FAQ", link: "/#faq-section" },
-              ].map((item, i) => (
+              {quickLinks.map((item: any, i: number) => (
                 <li key={i}>
                   <a href={item.link} className="text-white/90 hover:text-white hover:underline transition-all">
                     {item.name}
@@ -154,12 +168,7 @@ export function FooterSection({ settings }: { settings?: any }) {
           <div>
             <h4 className="text-sm xl:text-base 2xl:text-lg font-bold mb-3 xl:mb-5 text-white tracking-wide">Engagement</h4>
             <ul className="space-y-2 xl:space-y-3 text-[11px] sm:text-xs xl:text-sm 2xl:text-base">
-              {[
-                { name: "Become a Member", link: "/join-us" },
-                { name: "Newsletter", link: "/#communication-section" },
-                { name: "Upcoming Events", link: "/events" },
-                { name: "Contact Us", link: "/contact" },
-              ].map((item, i) => (
+              {engagementLinks.map((item: any, i: number) => (
                 <li key={i}>
                   <a href={item.link} className="text-white/90 hover:text-white hover:underline transition-all">
                     {item.name}
@@ -175,11 +184,11 @@ export function FooterSection({ settings }: { settings?: any }) {
             <div className="space-y-3 text-[11px] sm:text-xs xl:text-sm 2xl:text-base text-white">
               {/* Email */}
               <a
-                href="mailto:contact@dohadindia.org"
+                href={`mailto:${contactEmail}`}
                 className="inline-flex items-center space-x-2 px-3 py-1.5 sm:px-4 sm:py-2 2xl:px-6 2xl:py-3 bg-white/10 hover:bg-white/20 rounded-full transition-all border border-white/20 hover:border-white/40 group"
               >
                 <Mail className="h-4 w-4 xl:h-5 xl:w-5 text-white group-hover:scale-110 transition-transform" />
-                <span className="text-white font-semibold">contact@dohadindia.org</span>
+                <span className="text-white font-semibold">{contactEmail}</span>
               </a>
 
               {/* Secretariat */}
@@ -213,7 +222,7 @@ export function FooterSection({ settings }: { settings?: any }) {
         {/* Bottom Footer */}
         <div className="mt-8 xl:mt-16 border-t border-white/20 pt-4 xl:pt-6 text-center">
           <p className="text-[11px] sm:text-xs xl:text-sm 2xl:text-base text-white/95">
-            © {new Date().getFullYear()} DOHaD India Regional Society. All rights reserved.
+            © {new Date().getFullYear()} {copyrightText}
           </p>
           <div className="mt-2 flex justify-center space-x-3 sm:space-x-4 text-[10px] sm:text-xs xl:text-sm 2xl:text-base text-white/80">
             <a href="/terms" className="hover:text-white hover:underline transition-colors">

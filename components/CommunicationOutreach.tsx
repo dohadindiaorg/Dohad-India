@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { LinkedInIcon } from '@/components/linkedin-icon';
+import { SpecialNarrativesData, DEFAULT_NARRATIVES } from '@/lib/cms-defaults';
 
 type VariantType = 'primary' | 'sage' | 'rose';
 
@@ -419,9 +420,23 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ isOpen, onClose }) =>
 };
 
 // Main Component
-const CommunicationOutreach = () => {
+export interface CommunicationOutreachProps {
+  data?: SpecialNarrativesData['communication'];
+}
+
+const CommunicationOutreach = ({ data }: CommunicationOutreachProps = {}) => {
   const router = useRouter();
   const [isNewsletterModalOpen, setIsNewsletterModalOpen] = useState(false);
+
+  const title = data?.title || DEFAULT_NARRATIVES.communication.title;
+  const subtitle = data?.subtitle || DEFAULT_NARRATIVES.communication.subtitle;
+  const webinarsTitle = data?.webinarsTitle || DEFAULT_NARRATIVES.communication.webinarsTitle;
+  const webinarsDescription = data?.webinarsDescription || DEFAULT_NARRATIVES.communication.webinarsDescription;
+  const webinarsBullets = (Array.isArray(data?.webinarsBullets) && data.webinarsBullets.length > 0)
+    ? data.webinarsBullets
+    : DEFAULT_NARRATIVES.communication.webinarsBullets;
+  const followUsTitle = data?.followUsTitle || DEFAULT_NARRATIVES.communication.followUsTitle;
+  const followUsDescription = data?.followUsDescription || DEFAULT_NARRATIVES.communication.followUsDescription;
 
   return (
     <>
@@ -429,10 +444,10 @@ const CommunicationOutreach = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-4 md:mb-5 xl:mb-6 [@media(min-height:768px)]:mb-12 [@media(min-height:850px)]:2xl:mb-20">
             <h2 className="text-xl md:text-2xl xl:text-3xl [@media(min-height:768px)]:xl:text-5xl [@media(min-height:850px)]:2xl:text-6xl font-bold text-foreground mb-1 xl:mb-2 [@media(min-height:768px)]:mb-4 [@media(min-height:850px)]:mb-6">
-              Communication & Outreach
+              {title}
             </h2>
             <p className="text-[10px] sm:text-xs xl:text-sm [@media(min-height:768px)]:xl:text-lg [@media(min-height:850px)]:2xl:text-xl text-muted-foreground max-w-2xl xl:max-w-3xl 2xl:max-w-4xl mx-auto">
-              We actively promote and disseminate DOHaD research across India and globally through multiple communication platforms
+              {subtitle}
             </p>
           </div>
 
@@ -440,18 +455,19 @@ const CommunicationOutreach = () => {
             {/* Card 1: Webinars & Events - Clickable */}
             <div className="flex">
               <FeatherCard
-                title="Webinars & Events"
+                title={webinarsTitle}
                 subtitle=""
                 content={
                   <p className="text-muted-foreground text-[11px] sm:text-xs xl:text-sm mt-3 font-normal">
-                    Regular webinars featuring renowned Indian and international experts to share emerging insights from DOHaD research.
+                    {webinarsDescription}
                   </p>
                 }
-                bulletPoints={[
+                bulletPoints={webinarsBullets}
+                /*
                   "Expert talks on emerging DOHaD research",
                   "Methods workshops for practical skills",
                   "Policy roundtables for collaborative discussions"
-                ]}
+                */
                 variant="primary"
                 image="webinars-vector"
                 className="flex-1"
@@ -463,18 +479,18 @@ const CommunicationOutreach = () => {
             {/* Card 2: Quarterly Newsletter - with CTA */}
             <div className="flex">
               <FeatherCard
-                title="Follow Us"
+                title={followUsTitle}
                 subtitle=""
                 content={
                   <p className="text-muted-foreground text-[11px] sm:text-xs xl:text-sm mt-3 font-normal">
-                    Stay updated with carefully curated insights on recent publications, events, funding opportunities, and valuable member contributions.
+                    {followUsDescription}
                   </p>
                 }
                 variant="sage"
                 image="newsletter-vector"
                 className="flex-1"
                 showCTA={true}
-                ctaText="Follow Us"
+                ctaText={followUsTitle}
                 onCTAClick={() => setIsNewsletterModalOpen(true)}
               />
             </div>

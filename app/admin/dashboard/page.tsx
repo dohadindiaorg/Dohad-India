@@ -6,6 +6,12 @@ import {
   Users,
   FileText,
   Settings,
+  HelpCircle,
+  CreditCard,
+  FlaskConical,
+  Megaphone,
+  ShieldCheck,
+  Compass,
   ExternalLink,
   ArrowRight,
 } from 'lucide-react';
@@ -17,6 +23,12 @@ const sectionIcons = {
   '/admin/advisory': Users,
   '/admin/documents': FileText,
   '/admin/settings': Settings,
+  '/admin/faqs': HelpCircle,
+  '/admin/membership': CreditCard,
+  '/admin/research-pillars': FlaskConical,
+  '/admin/narratives': Megaphone,
+  '/admin/legal': ShieldCheck,
+  '/admin/navigation': Compass,
 } as const;
 
 export default function AdminDashboard() {

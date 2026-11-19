@@ -24,6 +24,7 @@ export default function EditEventPage() {
     featuredImage: '',
     galleryImages: [] as string[],
     startDate: '',
+    endDate: '',
     location: '',
     registrationLink: '',
     eventType: 'conference',
@@ -42,6 +43,7 @@ export default function EditEventPage() {
 
       if (data) {
         if (data.startDate) data.startDate = data.startDate.split('T')[0];
+        if (data.endDate) data.endDate = data.endDate.split('T')[0];
         setFormData({
           title: data.title ?? '',
           slug: data.slug ?? '',
@@ -49,6 +51,7 @@ export default function EditEventPage() {
           featuredImage: data.featuredImage ?? '',
           galleryImages: data.galleryImages ?? [],
           startDate: data.startDate ?? '',
+          endDate: data.endDate ?? '',
           location: data.location ?? '',
           registrationLink: data.registrationLink ?? '',
           eventType: data.eventType ?? 'conference',
@@ -93,13 +96,24 @@ export default function EditEventPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (formData.endDate && formData.startDate && formData.endDate < formData.startDate) {
+      toast.error('End date cannot be earlier than start date');
+      return;
+    }
+
     setIsSaving(true);
 
     try {
+      const payload: Record<string, any> = { ...formData, published: true };
+      if (!payload.endDate) {
+        payload.endDate = null;
+      }
+
       const res = await fetch(`/api/events/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, published: true }),
+        body: JSON.stringify(payload),
       });
 
       if (res.ok) {
@@ -156,16 +170,32 @@ export default function EditEventPage() {
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="startDate">Date*</Label>
-            <Input
-              id="startDate"
-              name="startDate"
-              type="date"
-              value={formData.startDate}
-              onChange={handleInputChange}
-              required
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="startDate">Start Date*</Label>
+              <Input
+                id="startDate"
+                name="startDate"
+                type="date"
+                value={formData.startDate}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="endDate">End Date (optional)</Label>
+              <Input
+                id="endDate"
+                name="endDate"
+                type="date"
+                value={formData.endDate}
+                onChange={handleInputChange}
+                min={formData.startDate || undefined}
+              />
+              <p className="text-xs text-muted-foreground">
+                For multi-day events (e.g. Oct 10 to 12). Leave blank for single-day.
+              </p>
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -199,9 +229,6 @@ export default function EditEventPage() {
               onChange={handleInputChange}
               placeholder="https://..."
             />
-            <p className="text-xs text-muted-foreground">
-              Leave blank if no online registration.
-            </p>
           </div>
         </div>
 

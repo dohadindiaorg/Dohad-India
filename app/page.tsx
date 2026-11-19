@@ -59,7 +59,7 @@ export default async function HomePage() {
             className="relative z-10 max-w-7xl mx-auto px-8 md:px-12"
             delay={0.2}
           >
-            <BentoCarousel />
+            <BentoCarousel data={settings?.researchFocus} />
           </AnimatedSection>
 
           {/* Capacity Building Section */}
@@ -68,7 +68,7 @@ export default async function HomePage() {
             className="relative z-10"
             delay={0.2}
           >
-            <CapacityBuilding />
+            <CapacityBuilding data={settings?.narratives?.capacityBuilding} />
           </AnimatedSection>
 
           {/* Communication & Outreach Section */}
@@ -77,7 +77,7 @@ export default async function HomePage() {
             className="relative z-10"
             delay={0.2}
           >
-            <CommunicationOutreach />
+            <CommunicationOutreach data={settings?.narratives?.communication} />
           </AnimatedSection>
 
           {/* Advocacy Section */}
@@ -86,7 +86,7 @@ export default async function HomePage() {
             className="relative z-10"
             delay={0.2}
           >
-            <AdvocacySection />
+            <AdvocacySection data={settings?.narratives?.advocacy} />
           </AnimatedSection>
 
           {/* FAQ Section */}
@@ -95,7 +95,7 @@ export default async function HomePage() {
             className="relative z-10 max-w-7xl mx-auto px-8 md:px-12"
             delay={0.2}
           >
-            <FAQSection />
+            <FAQSection faqs={settings?.faqs} />
           </AnimatedSection>
 
         </div>

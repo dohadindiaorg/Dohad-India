@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { formatEventDateRange } from "@/lib/event-dates";
 
 export default function UpcomingEventsGrid({ upcomingEvents }: { upcomingEvents: any[] }) {
   const [showAll, setShowAll] = useState(false);
@@ -52,12 +53,8 @@ export default function UpcomingEventsGrid({ upcomingEvents }: { upcomingEvents:
                     Featured
                   </span>
                 )}
-                <span className="text-xs text-muted-foreground ml-auto">
-                  {new Date(event.startDate).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
+                <span className="text-xs text-muted-foreground ml-auto font-medium">
+                  {formatEventDateRange(event.startDate, event.endDate)}
                 </span>
               </div>
               <h3 className="text-sm sm:text-base xl:text-xl font-bold text-foreground mb-2 line-clamp-2">{event.title}</h3>
