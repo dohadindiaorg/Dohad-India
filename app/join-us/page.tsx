@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { Header } from "@/components/header"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -6,6 +7,22 @@ import Image from "next/image"
 import { headingStyles } from "@/lib/utils"
 import { getSiteSettings } from "@/lib/data/site-settings"
 import { DEFAULT_MEMBERSHIP_PAGE, MembershipTier } from "@/lib/cms-defaults"
+import { BreadcrumbSchema } from "@/components/json-ld"
+
+export const metadata: Metadata = {
+  title: "Join Us | Membership & Community",
+  description:
+    "Become a member of the DOHaD India Regional Society. Connect with researchers, clinicians, epidemiologists, and public health advocates across India.",
+  alternates: {
+    canonical: "/join-us",
+  },
+  openGraph: {
+    title: "Join Us | Membership & Community | DOHaD India",
+    description:
+      "Become a member of the DOHaD India Regional Society. Connect with researchers, clinicians, epidemiologists, and public health advocates across India.",
+    url: "https://www.dohadindia.org/join-us",
+  },
+}
 
 export default async function JoinUsPage() {
   let settings = null
@@ -65,6 +82,12 @@ export default async function JoinUsPage() {
   return (
     <div className="bg-background">
       <Header />
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://www.dohadindia.org" },
+          { name: "Join Us", url: "https://www.dohadindia.org/join-us" },
+        ]}
+      />
 
       <main className="w-full">
         {/* Hero Section */}

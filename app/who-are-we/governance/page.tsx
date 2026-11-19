@@ -1,9 +1,26 @@
+import type { Metadata } from "next"
 import { Header } from "@/components/header"
 import { Landmark, Scale, FileCheck, Download, ArrowRight, Users } from "lucide-react"
 import Link from "next/link"
 import dbConnect from "@/lib/mongodb"
 import SiteSettings from "@/lib/models/SiteSettings"
 import { getGovernancePolicyList, normalizePolicies } from "@/lib/policy-documents"
+import { BreadcrumbSchema } from "@/components/json-ld"
+
+export const metadata: Metadata = {
+  title: "Governance & Policies | DOHaD India",
+  description:
+    "Review the constitutional framework, governance policies, and codes of conduct guiding DOHaD India Regional Society.",
+  alternates: {
+    canonical: "/who-are-we/governance",
+  },
+  openGraph: {
+    title: "Governance & Policies | DOHaD India",
+    description:
+      "Review the constitutional framework, governance policies, and codes of conduct guiding DOHaD India Regional Society.",
+    url: "https://www.dohadindia.org/who-are-we/governance",
+  },
+}
 
 const iconMap = {
   constitution: Landmark,
@@ -48,6 +65,13 @@ export default async function GovernancePage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://www.dohadindia.org" },
+          { name: "Who We Are", url: "https://www.dohadindia.org/who-are-we" },
+          { name: "Governance", url: "https://www.dohadindia.org/who-are-we/governance" },
+        ]}
+      />
 
       {/* Hero Section */}
       <section className="relative pt-20 pb-16 md:pt-28 md:pb-24 overflow-hidden flex flex-col items-center text-center px-6">
